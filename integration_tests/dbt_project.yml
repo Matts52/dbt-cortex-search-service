@@ -1,0 +1,24 @@
+# Integration test project for dbt_cortex_search_service
+#
+# Builds a base table from a seed and creates three Cortex Search Services
+# against it, covering the key configuration paths.
+
+config-version: 2
+
+name: 'dbt_cortex_search_service_integration_tests'
+version: '0.1.0'
+
+profile: 'dbt_cortex_search_service'
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+seeds:
+  dbt_cortex_search_service_integration_tests:
+    +quote_columns: false

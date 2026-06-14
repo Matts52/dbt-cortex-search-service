@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: docs_base
+    description: >
+      Base table built from the docs_seed fixture. Used as the source for all
+      Cortex Search Service integration test models.
+    columns:
+      - name: doc_id
+        description: Unique numeric identifier for each document.
+        data_tests:
+          - not_null
+          - unique
+      - name: content
+        description: The text content that is indexed by the search service.
+        data_tests:
+          - not_null
+      - name: category
+        description: Document category used as a filter attribute.
+      - name: region
+        description: Geographic region used as a filter attribute.
+
+  - name: search_minimal
+    description: >
+      Cortex Search Service built with only the required configs (on_column,
+      warehouse, target_lag). No attributes or comment.
+
+  - name: search_with_attributes
+    description: >
+      Cortex Search Service with ATTRIBUTES = category, region and a COMMENT.
+      Tests the optional config paths in default mode.
+
+  - name: search_raw_ddl
+    description: >
+      Cortex Search Service created via raw DDL pass-through mode (raw_ddl=true).
+      The model body contains everything after the service name.

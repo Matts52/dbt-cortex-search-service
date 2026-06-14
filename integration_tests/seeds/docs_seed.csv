@@ -1,0 +1,11 @@
+doc_id,content,category,region
+1,"Our return policy allows customers to return items within 30 days of purchase for a full refund.",policy,US
+2,"To reset your password, click the Forgot Password link on the login page and follow the instructions sent to your email.",support,US
+3,"The Premium Plan includes unlimited storage, priority support, and access to all advanced features.",product,EU
+4,"Shipping typically takes 3-5 business days for standard delivery and 1-2 days for express orders.",logistics,US
+5,"To cancel your subscription, navigate to Account Settings and select Cancel Subscription at the bottom of the page.",support,EU
+6,"Our data is encrypted at rest using AES-256 and in transit using TLS 1.3 to ensure your information stays secure.",security,APAC
+7,"The API rate limit is 1000 requests per minute per API key. Contact support if you need a higher limit.",product,US
+8,"We offer volume discounts starting at 10% for orders over 100 units and 20% for orders over 500 units.",pricing,EU
+9,"To add a team member, go to Settings, select Team Management, click Invite Member, and enter their email address.",support,APAC
+10,"Our SLA guarantees 99.9% uptime for all paid plans. Downtime credits are automatically applied to your next invoice.",policy,US

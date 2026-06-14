@@ -87,13 +87,15 @@
     {%- endif -%}
 
     create or replace cortex search service {{ relation }}
-    on {{ on_column }}{% if embedding_model is not none %} model = '{{ embedding_model }}'{% endif %}
-
+    on {{ on_column }}
     {%- if attributes is not none %}
     attributes = {{ dbt_cortex_search_service.cortex_search_service_render_attributes(attributes) }}
     {%- endif %}
     warehouse = {{ warehouse }}
     target_lag = '{{ target_lag }}'
+    {%- if embedding_model is not none %}
+    embedding_model = '{{ embedding_model }}'
+    {%- endif %}
     {%- if comment is not none %}
     comment = {{ dbt_cortex_search_service.cortex_search_service_quote_string(comment) }}
     {%- endif %}

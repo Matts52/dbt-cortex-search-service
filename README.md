@@ -85,10 +85,11 @@ This emits:
 
 ```sql
 CREATE OR REPLACE CORTEX SEARCH SERVICE <db>.<schema>.my_model
-ON transcript_text MODEL = 'snowflake-arctic-embed-l-v2.0'
+ON transcript_text
 ATTRIBUTES = region, agent_id, priority
 WAREHOUSE = CORTEX_WH
 TARGET_LAG = '1 day'
+EMBEDDING_MODEL = 'snowflake-arctic-embed-l-v2.0'
 COMMENT = 'Search index for support transcripts'
 AS (
   SELECT transcript_text, region, agent_id, priority
@@ -103,10 +104,11 @@ Set `raw_ddl=true` to pass the model body directly to Snowflake as the DDL that 
 
 ```sql
 {{ config(materialized='cortex_search_service', raw_ddl=true) }}
-on transcript_text model = 'snowflake-arctic-embed-l-v2.0'
+on transcript_text
 attributes = region, agent_id
 warehouse = CORTEX_WH
 target_lag = '1 day'
+embedding_model = 'snowflake-arctic-embed-l-v2.0'
 comment = 'Raw DDL mode example'
 as (
   select transcript_text, region, agent_id

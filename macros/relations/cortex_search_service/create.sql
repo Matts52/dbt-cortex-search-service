@@ -89,7 +89,7 @@
     create or replace cortex search service {{ relation }}
     on {{ on_column }}
     {%- if attributes is not none %}
-    attributes = {{ dbt_cortex_search_service.cortex_search_service_render_attributes(attributes) }}
+    attributes {{ dbt_cortex_search_service.cortex_search_service_render_attributes(attributes) }}
     {%- endif %}
     warehouse = {{ warehouse }}
     target_lag = '{{ target_lag }}'

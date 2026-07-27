@@ -14,7 +14,7 @@ Add to your project's `packages.yml`:
 
 ```yaml
 packages:
-  - package: dbt-labs/dbt_cortex_search_service
+  - package: Matts52/dbt_cortex_search_service
     version: [">=1.0.0", "<2.0.0"]
 ```
 

@@ -105,7 +105,7 @@ Set `raw_ddl=true` to pass the model body directly to Snowflake as the DDL that 
 ```sql
 {{ config(materialized='cortex_search_service', raw_ddl=true) }}
 on transcript_text
-attributes = region, agent_id
+attributes region, agent_id
 warehouse = CORTEX_WH
 target_lag = '1 day'
 embedding_model = 'snowflake-arctic-embed-l-v2.0'

@@ -24,7 +24,7 @@ macros:
         any future CREATE CORTEX SEARCH SERVICE syntax.
     arguments:
       - name: relation
-        type: SnowflakeRelation or string
+        type: any
         description: The fully-qualified service name used in the DDL.
       - name: sql
         type: string
@@ -36,7 +36,7 @@ macros:
       given relation.
     arguments:
       - name: relation
-        type: SnowflakeRelation
+        type: any
         description: The search service relation to drop.
 
   - name: snowflake__get_cortex_search_service_rename_sql
@@ -46,10 +46,10 @@ macros:
       and drop the old one manually.
     arguments:
       - name: relation
-        type: SnowflakeRelation
+        type: any
         description: The search service relation to rename (operation not supported).
       - name: new_name
-        type: SnowflakeRelation or string
+        type: any
         description: The intended new name (operation not supported).
 
   - name: cortex_search_service_quote_string
@@ -68,7 +68,7 @@ macros:
       comma-separated column list suitable for use in `ATTRIBUTES = ...`.
     arguments:
       - name: attributes
-        type: list or string
+        type: any
         description: >
           Attribute columns to filter on. Example as list: ['region', 'category'].
           Example as string: 'region, category'.

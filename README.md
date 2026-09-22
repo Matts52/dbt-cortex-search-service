@@ -28,22 +28,26 @@ Requires dbt 1.5.0 or higher and the `dbt-snowflake` adapter.
 
 ## Quick Start
 
-Create a `.sql` file in your `models/` directory with `materialized='cortex_search_service'`:
+Create a `.sql` file in your `models/` directory with `materialized='cortex_search_service'`. Nest Cortex Search options under `meta` for compatibility with the dbt v2 parser:
 
 ```sql
 -- models/support_search.sql
 {{
   config(
     materialized = 'cortex_search_service',
-    on_column    = 'content',
-    warehouse    = 'COMPUTE_WH',
-    target_lag   = '1 hour'
+    meta = {
+      'on_column':  'content',
+      'warehouse':  'COMPUTE_WH',
+      'target_lag': '1 hour'
+    }
   )
 }}
 
 select content
 from {{ ref('support_docs') }}
 ```
+
+> **Legacy top-level keys still work** (`config(on_column='content', ...)`) for backward compatibility, but produce `UnusedConfigKey` warnings under `dbt parse --use-v2-parser`. Migrate to `meta={...}` to silence them.
 
 Run it:
 
@@ -57,18 +61,20 @@ Snowflake will build a semantic search index over the `content` column and conti
 
 ### Default Mode (SELECT body + config)
 
-The model body is the SELECT query for the `AS (...)` clause. All Cortex Search Service options are specified in the `config()` block.
+The model body is the SELECT query for the `AS (...)` clause. All Cortex Search Service options are specified in the `config()` block, nested under `meta` (preferred) or at the top level (legacy):
 
 ```sql
 {{
   config(
-    materialized    = 'cortex_search_service',
-    on_column       = 'transcript_text',
-    attributes      = ['region', 'agent_id', 'priority'],
-    warehouse       = 'CORTEX_WH',
-    target_lag      = '1 day',
-    embedding_model = 'snowflake-arctic-embed-l-v2.0',
-    comment         = 'Search index for support transcripts'
+    materialized = 'cortex_search_service',
+    meta = {
+      'on_column':       'transcript_text',
+      'attributes':      ['region', 'agent_id', 'priority'],
+      'warehouse':       'CORTEX_WH',
+      'target_lag':      '1 day',
+      'embedding_model': 'snowflake-arctic-embed-l-v2.0',
+      'comment':         'Search index for support transcripts'
+    }
   )
 }}
 
@@ -120,8 +126,10 @@ as (
 
 ## Config Reference
 
-| Config | Required | Type | Description |
-|--------|----------|------|-------------|
+Cortex Search options should be placed inside `config(meta={...})` (preferred, v2-parser-compatible). Top-level keys still work but produce `UnusedConfigKey` warnings with `dbt parse --use-v2-parser`.
+
+| Key | Required | Type | Description |
+|-----|----------|------|-------------|
 | `on_column` | Yes* | string | Name of the text column to build the search index on. |
 | `warehouse` | Yes* | string | Warehouse used for indexing and serving. |
 | `target_lag` | Yes* | string | Max lag between base table and index. E.g. `'1 hour'`, `'1 day'`. |
@@ -132,7 +140,7 @@ as (
 
 \* Required in default mode. Not used in raw DDL mode.
 
-Standard dbt configs also work: `database`, `schema`, `alias`, `tags`, `pre_hook`, `post_hook`, `grants`, `enabled`, etc.
+Standard dbt configs (`database`, `schema`, `alias`, `tags`, `pre_hook`, `post_hook`, `grants`, `enabled`, etc.) go at the top level as usual — only the Cortex Search-specific keys above belong in `meta`.
 
 ## Upstream Dependencies
 

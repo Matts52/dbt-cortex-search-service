@@ -34,3 +34,9 @@ models:
     description: >
       Cortex Search Service created via raw DDL pass-through mode (raw_ddl=true).
       The model body contains everything after the service name.
+
+  - name: search_meta_config
+    description: >
+      Cortex Search Service configured via config(meta={...}) instead of top-level
+      config keys. Tests the v2-parser-compatible meta-first read path introduced
+      in v1.1.0.

@@ -51,7 +51,8 @@
 --  Returns: a valid DDL statement that creates the search service.
 -#}
 
-  {%- set raw_ddl = config.get('raw_ddl', default=false) -%}
+  {%- set _meta = config.get('meta', default={}) -%}
+  {%- set raw_ddl = _meta.get('raw_ddl', config.get('raw_ddl', false)) -%}
 
   {%- if raw_ddl -%}
 
@@ -60,12 +61,12 @@
 
   {%- else -%}
 
-    {%- set on_column = config.get('on_column') -%}
-    {%- set warehouse = config.get('warehouse') -%}
-    {%- set target_lag = config.get('target_lag') -%}
-    {%- set attributes = config.get('attributes', default=none) -%}
-    {%- set embedding_model = config.get('embedding_model', default=none) -%}
-    {%- set comment = config.get('comment', default=none) -%}
+    {%- set on_column       = _meta.get('on_column',       config.get('on_column')) -%}
+    {%- set warehouse       = _meta.get('warehouse',       config.get('warehouse')) -%}
+    {%- set target_lag      = _meta.get('target_lag',      config.get('target_lag')) -%}
+    {%- set attributes      = _meta.get('attributes',      config.get('attributes',      none)) -%}
+    {%- set embedding_model = _meta.get('embedding_model', config.get('embedding_model', none)) -%}
+    {%- set comment         = _meta.get('comment',         config.get('comment',         none)) -%}
 
     {%- if on_column is none -%}
       {{ exceptions.raise_compiler_error(

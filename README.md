@@ -246,6 +246,8 @@ bash scripts/run_integration_tests_snowflake.sh
 
 This runs `dbt build` (seeds + models + tests) followed by `dbt run-operation assert_search_services_exist` to verify the services exist in Snowflake.
 
+To check that `--defer` can see them (dbt's relation cache includes search services): `dbt run-operation assert_search_services_in_relation_cache`.
+
 ## Limitations
 
 - **No RENAME**: Cortex Search Services do not support `ALTER ... RENAME TO`. To rename a service, run it under the new model name and drop the old one manually.
@@ -253,6 +255,13 @@ This runs `dbt build` (seeds + models + tests) followed by `dbt run-operation as
 - **100M row limit**: The source SELECT must return fewer than 100M rows for optimal serving performance.
 - **Change tracking**: Automatically enabled on base tables. Target lag must be shorter than the data retention period.
 - **OBJECT columns**: Attribute columns cannot be of type `OBJECT`.
+- **`--defer`**: dbt-snowflake finds existing relations with `SHOW OBJECTS`, which does not return Cortex Search Services (or agents), so `--defer` always resolves `ref()` to the deferred (production) service, even when a dev / CI copy exists. To let deferral see them, add the package to the `dbt` dispatch search order:
+  ```yaml
+  dispatch:
+    - macro_namespace: dbt
+      search_order: ['<your_project>', 'dbt_cortex_search_service', 'dbt']
+  ```
+  This uses the package's `snowflake__list_relations_without_caching`, which adds the schema's search services and agents to the `SHOW OBJECTS` result.
 - **Snowflake only**: The `cortex_search_service` materialization only executes on the Snowflake adapter. On other adapters it compiles DDL for inspection but does not execute.
 
 ## References

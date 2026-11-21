@@ -17,7 +17,7 @@ echo ""
 echo "==> Compiled DDL for Cortex Search Service models:"
 echo ""
 
-for model in search_minimal search_with_attributes search_raw_ddl; do
+for model in search_minimal search_with_attributes search_raw_ddl search_raw_ddl_meta; do
   compiled_file=$(find target/compiled -name "${model}.sql" 2>/dev/null | head -1)
   if [[ -n "$compiled_file" ]]; then
     echo "--- ${model} ---"

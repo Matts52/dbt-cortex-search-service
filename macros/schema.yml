@@ -72,3 +72,17 @@ macros:
         description: >
           Attribute columns to filter on. Example as list: ['region', 'category'].
           Example as string: 'region, category'.
+
+  - name: cortex_search_service_config
+    description: >
+      Reads a model config key for the materialization: from `meta` when the
+      key is there, otherwise from the legacy top-level config. The legacy
+      `config.get` runs only when the key is not under `meta`, so keys set
+      under `meta` do not fire dbt-core's GetMetaKeyWarning.
+    arguments:
+      - name: key
+        type: string
+        description: The config key to read.
+      - name: default
+        type: any
+        description: Returned when the key is set in neither place.

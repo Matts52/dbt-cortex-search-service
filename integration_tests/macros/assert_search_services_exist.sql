@@ -15,7 +15,7 @@
 -#}
 {% macro assert_search_services_exist() %}
   {%- if execute -%}
-    {%- set expected = ['search_minimal', 'search_with_attributes', 'search_raw_ddl'] -%}
+    {%- set expected = ['search_minimal', 'search_with_attributes', 'search_raw_ddl', 'search_raw_ddl_meta'] -%}
     {%- for model_name in expected -%}
       {%- set rel = ref(model_name) -%}
       {%- do run_query(

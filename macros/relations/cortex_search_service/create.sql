@@ -51,8 +51,7 @@
 --  Returns: a valid DDL statement that creates the search service.
 -#}
 
-  {%- set _meta = config.get('meta', default={}) -%}
-  {%- set raw_ddl = _meta.get('raw_ddl', config.get('raw_ddl', false)) -%}
+  {%- set raw_ddl = dbt_cortex_search_service.cortex_search_service_config('raw_ddl', false) -%}
 
   {%- if raw_ddl -%}
 
@@ -61,12 +60,12 @@
 
   {%- else -%}
 
-    {%- set on_column       = _meta.get('on_column',       config.get('on_column')) -%}
-    {%- set warehouse       = _meta.get('warehouse',       config.get('warehouse')) -%}
-    {%- set target_lag      = _meta.get('target_lag',      config.get('target_lag')) -%}
-    {%- set attributes      = _meta.get('attributes',      config.get('attributes',      none)) -%}
-    {%- set embedding_model = _meta.get('embedding_model', config.get('embedding_model', none)) -%}
-    {%- set comment         = _meta.get('comment',         config.get('comment',         none)) -%}
+    {%- set on_column       = dbt_cortex_search_service.cortex_search_service_config('on_column') -%}
+    {%- set warehouse       = dbt_cortex_search_service.cortex_search_service_config('warehouse') -%}
+    {%- set target_lag      = dbt_cortex_search_service.cortex_search_service_config('target_lag') -%}
+    {%- set attributes      = dbt_cortex_search_service.cortex_search_service_config('attributes') -%}
+    {%- set embedding_model = dbt_cortex_search_service.cortex_search_service_config('embedding_model') -%}
+    {%- set comment         = dbt_cortex_search_service.cortex_search_service_config('comment') -%}
 
     {%- if on_column is none -%}
       {{ exceptions.raise_compiler_error(
@@ -106,6 +105,21 @@
 
   {%- endif -%}
 
+{%- endmacro %}
+
+
+{% macro cortex_search_service_config(key, default=none) -%}
+{#-
+--  Read a model config key, meta first, then the legacy top-level config.
+--  config.get(key) runs only when the key is not under meta: calling it for a
+--  meta key fires dbt-core's GetMetaKeyWarning, which fails --warn-error runs.
+-#}
+  {%- set meta = config.get('meta', default={}) -%}
+  {%- if key in meta -%}
+    {{- return(meta[key]) -}}
+  {%- else -%}
+    {{- return(config.get(key, default)) -}}
+  {%- endif -%}
 {%- endmacro %}
 
 
